@@ -1,21 +1,36 @@
-# .sqa/config.yml - jenkins-pipeline-library configuration file
 config:
-  project_repos:
-    saps-common:
-      repo: 'https://github.com/EOSC-synergy/saps-common'
-      branch: develop
-
+  credentials:
+  - id: synergy_dockerhub_bot_pass
+    password_var: JPL_DOCKERPASS
+    username_var: JPL_DOCKERUSER
+  project_repos: {}
+environment:
+  JPL_DOCKERPUSH: common-build
 sqa_criteria:
-   qc_style:
-     repos:
-       saps-common:
-         container: common-testing
-         commands:
-           - mvn -f /saps-common-repo/pom.xml spotless:check
-   qc_coverage:
-     repos:
-       saps-common:
-         container: common-testing
-         commands:
-           - mvn -f /saps-common-repo/pom.xml -B -DskipTests clean package
-           - mvn -f /saps-common-repo/pom.xml test
+  qc_doc:
+    repos:
+      this_repo:
+        commands:
+        - pip install recommonmark
+        - make html -C /saps-common-repo/docs/
+        container: common-docs
+  qc_security:
+    repos:
+      this_repo:
+        commands:
+        - mvn -f /saps-common-repo/pom.xml -B -DskipTests clean package com.github.spotbugs:spotbugs-maven-plugin:check
+        container: common-testing
+  qc_style:
+    repos:
+      this_repo:
+        commands:
+        - mvn -f /saps-common-repo/pom.xml spotless:check
+        container: common-testing
+  qc_coverage:
+    repos:
+      this_repo:
+        commands:
+        - mvn -f /saps-common-repo/pom.xml -B -DskipTests clean package
+        - mvn -f /saps-common-repo/pom.xml test
+        container: common-testing
+timeout: 600
