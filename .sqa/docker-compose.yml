@@ -1,12 +1,30 @@
-version: "3.6"
-
 services:
-  common-testing:
-    image: "maven:3-alpine"
-    container_name: common-testing
-    hostname: common-testing
+  common-build:
+    build:
+      args: {}
+      context: .
+      dockerfile: ./docker/Dockerfile
+    command: sleep 6000000
+    image: eoscsynergyapps/saps-common
     volumes:
-     - type: bind
-       source: ./saps-common
-       target: /saps-common-repo
-    command: sleep 3600
+    - source: ./
+      target: /sqaaas-build
+      type: bind
+    working_dir: /sqaaas-build
+  common-docs:
+    command: sleep 6000000
+    image: sphinxdoc/sphinx
+    volumes:
+    - source: ./
+      target: /sqaaas-build
+      type: bind
+    working_dir: /sqaaas-build
+  common-testing:
+    command: sleep 6000000
+    image: maven:3-alpine
+    volumes:
+    - source: ./
+      target: /sqaaas-build
+      type: bind
+    working_dir: /sqaaas-build
+version: '3.7'
