@@ -1,23 +1,24 @@
+@Library(['github.com/indigo-dc/jenkins-pipeline-library@release/2.1.0']) _
+
+def projectConfig
+
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
+    agent any
+
     stages {
-        stage('Build') {
+        stage('SQA baseline criterion: QC.Sty & QC.Uni & QC.Sec & QC.Doc') {
             steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
+                script {
+                    projectConfig = pipelineConfig(
+                        configFile: '.sqa/config.yml',
+                        scmConfigs: [ localBranch: true ]
+                    )
+                    buildStages(projectConfig)
+                }
             }
             post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
+                cleanup {
+                    cleanWs()
                 }
             }
         }
