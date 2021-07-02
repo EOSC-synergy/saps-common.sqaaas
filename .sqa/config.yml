@@ -12,7 +12,7 @@ sqa_criteria:
       this_repo:
         commands:
         - pip install recommonmark
-        - make html -C /saps-common-repo/docs/
+        - make html -C docs/
         container: common-docs
   qc_security:
     repos:
