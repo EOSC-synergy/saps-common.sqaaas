@@ -1,9 +1,9 @@
 services:
-  common-build:
+  saps-common-build:
     build:
       args: {}
       context: .
-      dockerfile: ./docker/Dockerfile
+      dockerfile: docker/Dockerfile
     command: sleep 6000000
     image: eoscsynergyapps/saps-common
     volumes:
@@ -11,7 +11,7 @@ services:
       target: /sqaaas-build
       type: bind
     working_dir: /sqaaas-build
-  common-docs:
+  saps-common-docs:
     command: sleep 6000000
     image: sphinxdoc/sphinx
     volumes:
@@ -19,7 +19,7 @@ services:
       target: /sqaaas-build
       type: bind
     working_dir: /sqaaas-build
-  common-testing:
+  saps-common-testing:
     command: sleep 6000000
     image: maven:3-alpine
     volumes:
