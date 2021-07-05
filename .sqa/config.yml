@@ -5,7 +5,7 @@ config:
     username_var: JPL_DOCKERUSER
   project_repos: {}
 environment:
-  JPL_DOCKERPUSH: common-build
+  JPL_DOCKERPUSH: saps-common-build
 sqa_criteria:
   qc_doc:
     repos:
@@ -13,24 +13,24 @@ sqa_criteria:
         commands:
         - pip install recommonmark
         - make html -C docs/
-        container: common-docs
+        container: saps-common-docs
   qc_security:
     repos:
       this_repo:
         commands:
-        - mvn -f /saps-common-repo/pom.xml -B -DskipTests clean package com.github.spotbugs:spotbugs-maven-plugin:check
-        container: common-testing
+        - mvn -f pom.xml -fn -B -DskipTests clean package com.github.spotbugs:spotbugs-maven-plugin:check
+        container: saps-common-testing
   qc_style:
     repos:
       this_repo:
         commands:
-        - mvn -f /saps-common-repo/pom.xml spotless:check
-        container: common-testing
+        - mvn -f pom.xml spotless:check
+        container: saps-common-testing
   qc_coverage:
     repos:
       this_repo:
         commands:
-        - mvn -f /saps-common-repo/pom.xml -B -DskipTests clean package
-        - mvn -f /saps-common-repo/pom.xml test
-        container: common-testing
+        - mvn -f pom.xml -B -DskipTests clean package
+        - mvn -f pom.xml test
+        container: saps-common-testing
 timeout: 600
